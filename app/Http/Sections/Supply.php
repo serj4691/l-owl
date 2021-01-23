@@ -69,8 +69,9 @@ class Supply extends Section implements Initializable
                     $query->orderBy('created_at', $direction);
                 })
             ,
+            AdminColumn::text('delivery_name', 'Name of deliver'),
             AdminColumn::text('count_supply', 'Count of item'),
-            AdminColumn::boolean('number_supply', 'On'),
+            //AdminColumn::boolean('number_supply', 'On'),
             AdminColumn::text('created_at', 'Created / updated', 'updated_at')
                 ->setWidth('160px')
                 ->setOrderable(function($query, $direction) {
@@ -115,12 +116,9 @@ class Supply extends Section implements Initializable
     {
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('number_supply', 'Number')
-                    ->required()
-                ,
-                AdminFormElement::text('count_supply', 'Count of item')
-                    ->required()
-                ,
+                AdminFormElement::text('number_supply', 'Number of order')->required(),
+                AdminFormElement::text('delivery_name', 'Name of deliver')->required(),
+                AdminFormElement::text('count_supply', 'Count of item')->required(),
                 AdminFormElement::html('<hr>'),
                 AdminFormElement::datetime('created_at')
                     ->setVisible(true)

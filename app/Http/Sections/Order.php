@@ -72,6 +72,7 @@ class Order extends Section implements Initializable
             ,
             AdminColumn::text('name_order', 'Shop', 'created_at'),
             AdminColumn::text('count_order', 'Number of items', 'created_at'),
+            AdminColumn::text('status', 'Status of order', 'created_at'),
             AdminColumn::text('deadline_order', 'Deadtime', 'created_at'),
             //AdminColumn::boolean('name_order', 'On'),
             AdminColumn::text('created_at', 'Created / updated', 'updated_at')
@@ -116,10 +117,11 @@ class Order extends Section implements Initializable
      */
     public function onEdit($id_order = null, $payload = [])
     {
+
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::number('number_order', '№ order')->required(),
-                AdminFormElement::text('name_order', 'Shop')->required(),
+                AdminFormElement::select('name_order', 'Shop', \App\Models\Shop::class)->setUsageKey('title_shop')->setDisplay('title_shop')->required(),
                 AdminFormElement::number('count_order', 'Number of items')->required(),
                 AdminFormElement::date('deadline_order', 'Date')->required(),
                 AdminFormElement::html('<hr>'),

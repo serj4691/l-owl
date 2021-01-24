@@ -9,6 +9,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = "id_order";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,6 +19,7 @@ class Order extends Model
     protected $fillable = [
         'number_order',
         'name_order',
+        'status',
         'count_order',
         'deadline_order',
     ];

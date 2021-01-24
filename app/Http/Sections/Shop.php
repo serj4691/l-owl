@@ -71,7 +71,7 @@ class Shop extends Section implements Initializable
                 })
             ,
             AdminColumn::link('address_shop', 'Address'),
-            AdminColumn::boolean('title_shop', 'On'),
+            //AdminColumn::boolean('title_shop', 'On'),
             AdminColumn::text('created_at', 'Created / updated', 'updated_at')
                 ->setWidth('160px')
                 ->setOrderable(function($query, $direction) {

@@ -9,6 +9,8 @@ class Delivery extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = "id_delivery";
+
     /**
      * The attributes that are mass assignable.
      *

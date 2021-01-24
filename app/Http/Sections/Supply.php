@@ -16,6 +16,7 @@ use SleepingOwl\Admin\Form\Buttons\Save;
 use SleepingOwl\Admin\Form\Buttons\SaveAndClose;
 use SleepingOwl\Admin\Form\Buttons\SaveAndCreate;
 use SleepingOwl\Admin\Section;
+use SleepingOwl\Admin\Model\ModelConfigurationManager;
 
 /**
  * Class Supply
@@ -47,6 +48,33 @@ class Supply extends Section implements Initializable
     public function initialize()
     {
         $this->addToNavigation()->setPriority(100)->setIcon('fa fa-lightbulb-o');
+        $this->created(function($config, \Illuminate\Database\Eloquent\Model $model) {
+            $supplies = \App\Models\Supply::all();
+            foreach ($supplies as $sup){
+                $item = $sup;
+            }
+            $count_last = $item['count_supply'];
+            $sup = $item['number_supply'];
+            $count = \App\Models\Order::all()->where('number_order','==', $sup);
+            if ($count_last > $count[0]['count_order']) {
+                $count_last = $count[0]['count_order'];
+                $new_sup = \App\Models\Supply::find($item['id_supply']);
+                $new_sup->count_supply = $count_last;
+                $new_sup->save();
+                $new_order = \App\Models\Order::find($count[0]['id_order']);
+                $new_order->status = 'full';
+                $new_order->count_order = 0;
+                $new_order->save();
+
+            }
+            if ($count_last < $count[0]['count_order']) {
+                $count_last = $count[0]['count_order'] - $count_last;
+                $new_order = \App\Models\Order::find($count[0]['id_order']);
+                $new_order->count_order = $count_last;
+                $new_order->save();
+            }
+
+        });
     }
 
     /**
@@ -56,6 +84,7 @@ class Supply extends Section implements Initializable
      */
     public function onDisplay($payload = [])
     {
+
         $columns = [
             AdminColumn::text('id_supply', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
             AdminColumn::link('number_supply', 'Number')
@@ -114,21 +143,29 @@ class Supply extends Section implements Initializable
      */
     public function onEdit($id_supply = null, $payload = [])
     {
+        $arrOrder[] = \App\Models\Order::all()->where('status','==', 'full')->toArray();
+        $excl= [];
+        foreach ($arrOrder[0] as $key => $item){
+            $excl[] = $item['number_order'];
+        }
+
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('number_supply', 'Number of order')->required(),
-                AdminFormElement::text('delivery_name', 'Name of deliver')->required(),
+                AdminFormElement::select('number_supply', 'Number of order', \App\Models\Order::class)
+                    ->setUsageKey('number_order')->setDisplay('number_order')->exclude($excl)->required(),
+                AdminFormElement::select('delivery_name', 'Name of deliver', \App\Models\Delivery::class)
+                    ->setUsageKey('title_delivery')->setDisplay('title_delivery')->required(),
                 AdminFormElement::text('count_supply', 'Count of item')->required(),
                 AdminFormElement::html('<hr>'),
                 AdminFormElement::datetime('created_at')
                     ->setVisible(true)
-                    ->setReadonly(false)
-                ,
+                    ->setReadonly(false),
                 AdminFormElement::html('last AdminFormElement without comma')
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 AdminFormElement::text('id_supply', 'ID')->setReadonly(true),
                 AdminFormElement::html('last AdminFormElement without comma')
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
+
         ]);
 
         $form->getButtons()->setButtons([
@@ -139,6 +176,8 @@ class Supply extends Section implements Initializable
         ]);
 
         return $form;
+
+
     }
 
     /**

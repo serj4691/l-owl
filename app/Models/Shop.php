@@ -9,6 +9,8 @@ class Shop extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = "id_shop";
+
 
     /**
      * The attributes that are mass assignable.

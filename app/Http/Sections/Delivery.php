@@ -121,9 +121,9 @@ class Delivery extends Section implements Initializable
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('title_delivery', 'Name')->required(),
-                AdminFormElement::text('specialization_delivery', 'Specialization')->required(),
+                //AdminFormElement::text('specialization_delivery', 'Specialization')->required(),
                 //AdminFormElement::multiselect('specialization_delivery', 'Specialization')->setModelForOptions(\App\Models\Type::class)->setDisplay('title_type')->required(),
-                //AdminFormElement::select('specialization_delivery', 'Specialization', $options =['Детективы','Стихи','Научно-популярное','Детская литература'] )->required(),
+                AdminFormElement::select('specialization_delivery', 'Specialization', $options =['Детективы','Стихи','Научно-популярное','Детская литература'] )->required(),
                 AdminFormElement::html('<hr>'),
                 AdminFormElement::datetime('created_at')
                     ->setVisible(true)

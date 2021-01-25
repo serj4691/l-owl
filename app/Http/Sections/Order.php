@@ -123,6 +123,7 @@ class Order extends Section implements Initializable
                 AdminFormElement::number('number_order', '№ order')->required(),
                 AdminFormElement::select('name_order', 'Shop', \App\Models\Shop::class)->setUsageKey('title_shop')->setDisplay('title_shop')->required(),
                 AdminFormElement::number('count_order', 'Number of items')->required(),
+                AdminFormElement::text('status', 'Status of order'),
                 AdminFormElement::date('deadline_order', 'Date')->required(),
                 AdminFormElement::html('<hr>'),
                 AdminFormElement::datetime('created_at')
